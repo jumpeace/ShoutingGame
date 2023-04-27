@@ -1,5 +1,4 @@
 import Object from "./object.mjs";
-import { Xy } from "./utils.mjs";
 
 export default class Creature extends Object {
     constructor(p, imageInfo, getPos, shots, option) {
