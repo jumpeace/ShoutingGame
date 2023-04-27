@@ -9,10 +9,8 @@ import setting from './setting.mjs';
 
 let playerShots;
 let player;
-let enemyShotLine;
 let rock;
 let rocket;
-let ship;
 let frameCount;
 
 const images = new Images([
