@@ -5,7 +5,7 @@ class Status {
     set (value) {
         this.value = value;
     }
-    get (value) {
+    get () {
         return this.value;
     }
 }
