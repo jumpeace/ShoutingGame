@@ -1,5 +1,3 @@
-import { Xy } from './utils.mjs';
-
 export default class Images {
     constructor(src) {
         this.data = {}
