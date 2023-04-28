@@ -13,23 +13,29 @@ let rock;
 let rocket;
 let frameCount;
 
+// 画像の情報を格納
 const images = new Images([
+    // プレイヤーの画像
     {
         name: 'player',
         size: new Xy(120, 151),
     },
+    // プレイヤーの弾丸の画像
     {
         name: 'player_shot_sm',
         size: new Xy(15, 90),
     },
+    // 岩（敵）の画像
     {
         name: 'rock',
         size: new Xy(40, 40),
     },
+    // ロケット（敵）の画像
     {
         name: 'rocket',
         size: new Xy(60, 80),
     },
+    // 敵が弾丸で消去されたときの爆破画像
     {
         name: 'blast_enemy',
         size: new Xy(110, 110),
@@ -46,6 +52,7 @@ function main(p) {
     p.setup = function () {
         p.createCanvas(p.windowWidth, p.windowHeight);
 
+        // プレイヤーによる弾丸の線
         playerShots = new ShotLine(
             new Object(
                 p,
@@ -58,7 +65,8 @@ function main(p) {
                 shotMax: setting.playerShots.shotMax,
             }
         );
-
+        
+        // プレイヤー
         player = new Creature(
             p,
             images.get('player'),
@@ -69,7 +77,8 @@ function main(p) {
             playerShots,
             { getStartY: player => player.pos.y - player.size.y / 2 - 40 }
         );
-
+        
+        // 岩(複数)
         rock = new Enemies(
             new Object(
                 p,
@@ -88,6 +97,7 @@ function main(p) {
             }
         );
 
+        // ロケット(複数)
         rocket = new Enemies(
             new Object(
                 p,
@@ -115,6 +125,7 @@ function main(p) {
         p.background(0);
     }
 
+    // マウスをクリックした場合は、弾丸を打つ
     p.mousePressed = function () {
         player.addShot();
     }
@@ -124,6 +135,7 @@ function main(p) {
         p.frameRate(60)
         p.background(0);
 
+        // ゲームオーバーの場合は、「Game Over」の表示と記録を表示する
         if (isGameOver.get()) {
             p.fill(255, 255, 255);
             const fontSize = 44;
@@ -144,23 +156,25 @@ function main(p) {
             return;
         }
 
+        // プレイヤーのx座標をカーソルのx座標に更新
         player.setPos(new Xy(
             p.mouseX,
             p.windowHeight - player.size.y / 2 - 30
         ));
-
+        
+        // 各ゲームオブジェクトの描画
         player.draw();
         rock.draw(player);
         rocket.draw(player);
 
-        // 秒数
+        // 経過時間を表示する
         p.fill(150, 150, 150);
         p.rect(0, 0, p.windowWidth, 40);
         p.fill(255, 255, 255);
         p.textSize(24);
         p.text(`経過時間: ${Math.floor(frameCount / 60)}.${Math.floor(frameCount / 6) % 10}秒`, 10, 30)
 
-        // ゲージ
+        // 保持弾丸数を表すゲージを表示する
         const gageWidth = p.windowWidth / playerShots.shotMax;
         for (let i = 0; i < playerShots.shotMax; i++) {
             if (i < playerShots.shotCount) {
@@ -172,6 +186,7 @@ function main(p) {
             p.rect(i * gageWidth, p.windowHeight - 40, (i + 1) * gageWidth, 40);
         }
 
+        // 保持している弾丸の回復時間を表示する
         if (playerShots.shotCount < playerShots.shotMax) {
             p.fill(255, 255, 255);
             p.textSize(28);
@@ -183,6 +198,7 @@ function main(p) {
                 p.windowHeight - 40, playerShots.shotCount * gageWidth, 40
             );
         }
+        // フレーム数の更新
         frameCount++;
     }
 };
